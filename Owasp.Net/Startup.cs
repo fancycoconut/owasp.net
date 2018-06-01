@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Owasp.Net.Services;
@@ -57,13 +58,21 @@ namespace OwaspDemo
                 options.ExpireTimeSpan = TimeSpan.FromDays(10);
             });
 
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IBloggingService, BloggingService>();
             services.AddTransient<IUserSearchService, UserSearchService>();
             services.AddTransient<IUserSessionStore, UserSessionStore>();
 
-            services.AddMvc();
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,7 +80,6 @@ namespace OwaspDemo
         {
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.SeedDatabase();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
@@ -79,10 +87,12 @@ namespace OwaspDemo
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            //app.UseCookiePolicy();
             app.UseAuthentication();
 
             app.UseMvc(routes =>
